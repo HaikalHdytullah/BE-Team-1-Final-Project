@@ -7,6 +7,8 @@ const apiRouter = express.Router();
  *       implementations
  */
 
+apiRouter.post("/api/v1/register", controllers.api.v1.userController.register);
+
 apiRouter.use(controllers.api.main.onLost);
 apiRouter.use(controllers.api.main.onError);
 

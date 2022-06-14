@@ -15,12 +15,12 @@ module.exports = {
       "typeUsers",
       [
         {
-          type: "Seller",
+          type: "Admin",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          type: "Buyer",
+          type: "User",
           createdAt: new Date(),
           updatedAt: new Date(),
         },

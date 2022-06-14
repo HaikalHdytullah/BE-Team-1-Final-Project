@@ -17,16 +17,16 @@ module.exports = {
       "users",
       [
         {
-          name: "seller",
-          email: "seller@gmail.com",
+          nama: "admin",
+          email: "admin@gmail.com",
           password: bcrypt.hashSync("123", 10),
           idType: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          name: "buyer",
-          email: "buyer@gmail.com",
+          nama: "user",
+          email: "user@gmail.com",
           password: bcrypt.hashSync("123", 10),
           idType: 2,
           createdAt: new Date(),
