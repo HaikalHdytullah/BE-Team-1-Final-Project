@@ -110,7 +110,7 @@ module.exports = {
           alamat: null,
           noHp: null,
           gambar: null,
-          googleId: null,
+          googleId: sub,
           registeredVia: "google",
           idType: 2,
           createdAt: new Date(),
