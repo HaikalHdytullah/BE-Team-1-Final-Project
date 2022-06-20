@@ -4,9 +4,9 @@
   "main": "app/index.js",
   "license": "MIT",
   "engines": {
-    "node": "16.x",
+    "node": "16.*",
     "npm": "8.*",
-    "yarn": "1.22.19"
+    "yarn": "1.22.*"
   },
   "scripts": {
     "start": "node ./bin/www",
@@ -23,21 +23,21 @@
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "cloudinary": "^1.30.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7",
     "pg": "^8.7.3",
     "sequelize": "^6.18.0",
     "sequelize-cli": "^6.4.1",
     "sqlite3": "^5.0.8",
     "swagger-ui-express": "^4.3.0",
-    "yamljs": "^0.3.0",
-    "body-parser": "^1.20.0",
-    "cloudinary": "^1.30.0",
-    "multer": "^1.4.5-lts.1",
-    "path": "^0.12.7"
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
