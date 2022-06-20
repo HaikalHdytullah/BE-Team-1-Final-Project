@@ -21,6 +21,8 @@ module.exports = {
         alamat: null,
         noHp: null,
         gambar: null,
+        googleId: null,
+        registeredVia: "form",
         idType: 2,
         createdAt: new Date(),
         updatedAt: new Date(),
