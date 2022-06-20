@@ -29,6 +29,12 @@ module.exports = {
       gambar: {
         type: Sequelize.STRING,
       },
+      googleId: {
+        type: Sequelize.STRING,
+      },
+      registeredVia: {
+        type: Sequelize.STRING,
+      },
       idType: {
         type: Sequelize.INTEGER,
         references: {

@@ -1,4 +1,4 @@
-const productsService = require("../../../services/productsService");
+const productsService = require("../../../services/productsServices");
 
 const create = async (req, res, next) => {
   const { name, price, category, description, isPublish } = req.body;
