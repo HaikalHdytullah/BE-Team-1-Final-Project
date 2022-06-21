@@ -8,7 +8,21 @@ module.exports = {
       },
     });
   },
+  findById(id) {
+    return users.findOne({
+      where: {
+        id,
+      },
+    });
+  },
   create(data) {
     return users.create(data);
+  },
+  update(id, updateArgs) {
+    return users.update(updateArgs, {
+      where: {
+        id,
+      },
+    });
   },
 };
