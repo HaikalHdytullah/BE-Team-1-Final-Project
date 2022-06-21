@@ -1,6 +1,6 @@
-const productService = require("../../../services/productService");
-const uploadOnMemory = require("../../../utils/uploadOnMemory");
-const cloudinary = require("../../../utils/cloudinary");
+const productService = require("../../../services/productServices");
+const uploadOnMemory = require("../../../../utils/uploadOnMemory");
+const cloudinary = require("../../../../utils/cloudinary");
 
 module.exports = {
   // list all products

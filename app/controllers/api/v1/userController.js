@@ -57,7 +57,6 @@ module.exports = {
       const user_data = JSON.parse(JSON.stringify(user));
 
       // Delete Image from Cloudinary
-      console.log(user_data.gambar.substring(62, 82));
       let cloudImage = user_data.gambar.substring(62, 82);
       if (user.gambar !== "") {
         cloudinaryDestroy(cloudImage);
