@@ -9,18 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      products.belongsTo(models.users, { foreignKey: "idPenjual" });
-      products.hasMany(models.transactions, { foreignKey: "idProduct" });
+      products.hasMany(models.productspics, { foreignKey: "idProduct" });
+      products.hasOne(models.transactions, { foreignKey: "idProduct" });
     }
   }
   products.init(
     {
+      idUser: DataTypes.INTEGER,
+      idkategori: DataTypes.INTEGER,
       nama: DataTypes.STRING,
-      harga: DataTypes.INTEGER,
-      kategori: DataTypes.STRING,
+      harga: DataTypes.FLOAT,
       deskripsi: DataTypes.STRING,
-      gambar: DataTypes.ARRAY(DataTypes.STRING),
-      idPenjual: DataTypes.INTEGER,
+      minat: DataTypes.BOOLEAN,
     },
     {
       sequelize,

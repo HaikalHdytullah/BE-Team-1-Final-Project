@@ -20,35 +20,15 @@ apiRouter.put(
 );
 
 // Define Routes Products
-apiRouter.get("/api/v1/products", controllers.api.v1.productController.getAll);
-// apiRouter.post(
-//   "/api/v1/products/create",
-//   controllers.api.v1.upload.fields([{ name: "picture" }]),
-//   productController.create
-// );
-// apiRouter.get(
-//   "/api/v1/products/:id",
-//   controllers.api.v1.productController.getProductById
-// );
-// apiRouter.put(
-//   "/api/v1/products/:id",
-//   controllers.api.v1.upload.fields([{ name: "picture" }]),
-//   productController.updateProductById
-// );
-// apiRouter.delete(
-//   "/api/v1/products/:id",
-//   controllers.api.v1.productController.deleteProductById
-// );
-// apiRouter.get(
-//   "/api/v1/productss/filter/category?",
-//   productController.filterByCategory
-// );
+apiRouter.get("/api/v1/products", controllers.api.v1.productController.listAll);
+// add product
+apiRouter.post(
+  "/api/v1/products",
+  uploadOnMemory.array("image", 4),
+  controllers.api.v1.userController.authorize,
+  controllers.api.v1.productController.addProduct
+);
 
-// Public File Access
-// apiRouter.use(
-//   "/public/files",
-//   express.static(path.join(__dirname, "/storages"))
-// );
 apiRouter.use(controllers.api.main.onLost);
 apiRouter.use(controllers.api.main.onError);
 
