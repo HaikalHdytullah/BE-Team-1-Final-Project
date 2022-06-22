@@ -14,8 +14,16 @@ module.exports = {
     }
   },
 
+  async findById(id) {
+    return userRepository.findProduct(id);
+  },
+
   async addProduct(requestBody) {
     return productRepository.addProduct(requestBody);
+  },
+
+  async addProductPic(requestBody) {
+    return productRepository.addProductPic(requestBody);
   },
 
   async addImageProduct(requestBody) {

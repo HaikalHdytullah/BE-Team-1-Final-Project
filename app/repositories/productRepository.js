@@ -1,8 +1,10 @@
-const { products, ProductPics } = require("../models");
+const { products, productpics } = require("../models");
 
 module.exports = {
   findAll() {
-    return products.findAll();
+    return products.findAll({
+      include: [{ model: productpics }],
+    });
   },
   getTotalProducts() {
     return products.count();
@@ -13,6 +15,10 @@ module.exports = {
 
   addProduct(createArgs) {
     return products.create(createArgs);
+  },
+
+  addProductPic(createArgs) {
+    return productpics.create(createArgs);
   },
 
   addImageProduct(createArgs) {

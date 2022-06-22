@@ -1,6 +1,8 @@
 const productService = require("../../../services/productServices");
-const uploadOnMemory = require("../../../../utils/uploadOnMemory");
+const { promisify } = require("util");
 const cloudinary = require("../../../../utils/cloudinary");
+const cloudinaryUpload = promisify(cloudinary.uploader.upload);
+const cloudinaryDestroy = promisify(cloudinary.uploader.destroy);
 
 module.exports = {
   // list all products
@@ -27,42 +29,33 @@ module.exports = {
   // add product
   async addProduct(req, res) {
     try {
+      let fotoProduk = [];
+      let fileBase64 = [];
+      let file = [];
       const product = {
-        iduser: req.user.id,
-        idkategori: req.body.kategori,
+        idUser: req.body.idUser,
         nama: req.body.nama,
         harga: req.body.harga,
+        kategori: req.body.kategori,
         deskripsi: req.body.deskripsi,
+        minat: false,
       };
-      const addProduct = await productService.addProduct(product);
-      const upload = await cloudinary.uploader.upload(
-        localUrl,
-        function (err, result) {
-          if (err) {
-            console.log(err);
-            res.status(400).json({
-              message: err.message,
-            });
-            return;
-          }
-          productService.addImageProduct({
-            idProduct: addProduct.id,
-            gambar: result.secure_url,
-          });
-        }
-      );
-      res.status(201).json({
-        message: "New Product Added",
-        product: addProduct,
-      });
+      const product_data = await productService.addProduct(product);
 
-      var urls = [];
       for (var i = 0; i < req.files.length; i++) {
-        var localUrl = req.files[i].buffer.toString("base64");
-        console.log(localUrl);
-        var result = await upload(localUrl);
-        urls.push(result.url);
+        fileBase64.push(req.files[i].buffer.toString("base64"));
+        file.push(`data:${req.files[i].mimetype};base64,${fileBase64[i]}`);
+        const result = await cloudinaryUpload(file[i]);
+        fotoProduk.push(result.secure_url);
+        await productService.addProductPic({
+          idProduct: product_data.id,
+          gambar: fotoProduk[i],
+        });
       }
+
+      res.status(200).json({
+        message: "tambah produk berhasil",
+      });
     } catch (error) {
       res.status(400).json({
         message: error.message,

@@ -24,7 +24,7 @@ apiRouter.get("/api/v1/products", controllers.api.v1.productController.listAll);
 // add product
 apiRouter.post(
   "/api/v1/products",
-  uploadOnMemory.array("image", 4),
+  uploadOnMemory.array("gambar", 4),
   controllers.api.v1.productController.addProduct
 );
 
