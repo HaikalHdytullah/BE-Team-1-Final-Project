@@ -27,6 +27,14 @@ apiRouter.post(
   uploadOnMemory.array("gambar", 4),
   controllers.api.v1.productController.addProduct
 );
+// update product
+apiRouter.put(
+  "/api/v1/products/:id",
+  uploadOnMemory.array("gambar", 4),
+  controllers.api.v1.productController.updateProduct
+);
+// delete product
+apiRouter.delete("/api/v1/products/:id", controllers.api.v1.productController.deleteProduct);
 
 apiRouter.use(controllers.api.main.onLost);
 apiRouter.use(controllers.api.main.onError);

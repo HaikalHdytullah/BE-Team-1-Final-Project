@@ -6,11 +6,21 @@ module.exports = {
       include: [{ model: productpics }],
     });
   },
+
   getTotalProducts() {
     return products.count();
   },
+
   findProduct(id) {
     return products.findByPk({ where: { iduser: id } });
+  },
+
+  findProductPicAll(){
+    return productpics.findAll();
+  },
+
+  findProductPic(id) {
+    return productpics.findByPk({ where: { idProduct: id } });
   },
 
   addProduct(createArgs) {
@@ -21,11 +31,19 @@ module.exports = {
     return productpics.create(createArgs);
   },
 
-  addImageProduct(createArgs) {
-    return ProductPics.create(createArgs);
-  },
-
   updateProduct(id, updateArgs) {
     return products.update(updateArgs, { where: { id } });
   },
+
+  updateProductPic(id, updateArgs) {
+    return productpics.update(updateArgs, { where: { id } });
+  },
+
+  deleteProduct(id) {
+    return products.destroy({ where: { id } });
+  },
+
+  deleteProductPic(id) {
+    return productpics.destroy({ where: { idProduct: id } });
+  }
 };

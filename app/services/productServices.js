@@ -15,7 +15,11 @@ module.exports = {
   },
 
   async findById(id) {
-    return userRepository.findProduct(id);
+    return productRepository.findProduct(id);
+  },
+
+  async findProductPic(id) {
+    return productRepository.findProductPic(id);
   },
 
   async addProduct(requestBody) {
@@ -26,7 +30,19 @@ module.exports = {
     return productRepository.addProductPic(requestBody);
   },
 
-  async addImageProduct(requestBody) {
-    return productRepository.addImageProduct(requestBody);
+  async updateProduct(id, requestBody) {
+    return productRepository.updateProduct(id, requestBody);
   },
+
+  async updateProductPic(id, requestBody) {
+    return productRepository.updateProductPic(id, requestBody);
+  },
+
+  async deleteProduct(id) {
+    return productRepository.deleteProduct(id);
+  },
+
+  async deleteProductPic(id) {
+    return productRepository.deleteProductPic(id);
+  }
 };
