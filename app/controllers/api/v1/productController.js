@@ -95,7 +95,7 @@ module.exports = {
           const result = await cloudinaryUpload(file[i]);
           fotoProduk.push(result.secure_url);
           await productService.addProductPic({
-            idProduct: productPic.id,
+            idProduct: id,
             gambar: fotoProduk[i],
           });
         }
