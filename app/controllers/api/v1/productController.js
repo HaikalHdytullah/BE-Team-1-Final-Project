@@ -115,7 +115,19 @@ module.exports = {
   async deleteProduct(req, res) {
     try {
       const id = req.params.id;
+      
+      const productPic = await productService.findProductPicByIdProduct(id);
+      let cloudImage;
+
+      if (productPic.length > 0) {
+        for (var i = 0; i < productPic.length; i++) {
+          cloudImage = productPic[i].gambar.substring(62, 82);
+          cloudinaryDestroy(cloudImage);
+        }
+      }
+      await productService.deleteProductPic(id);
       await productService.deleteProduct(id);
+      
       res.status(200).json({
         message: "delete product berhasil",
       });

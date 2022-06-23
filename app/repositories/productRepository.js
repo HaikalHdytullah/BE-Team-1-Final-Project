@@ -15,18 +15,10 @@ module.exports = {
     return products.findByPk({ where: { iduser: id } });
   },
 
-  findProductPicAll() {
-    return productpics.findAll();
-  },
-
   findProductPicByIdProduct(id) {
     return productpics.findAll({
       where: { idProduct: id },
     });
-  },
-
-  findProductPic(id) {
-    return productpics.findByPk({ where: { idProduct: id } });
   },
 
   addProduct(createArgs) {
@@ -39,10 +31,6 @@ module.exports = {
 
   updateProduct(id, updateArgs) {
     return products.update(updateArgs, { where: { id } });
-  },
-
-  updateProductPic(id, updateArgs) {
-    return productpics.update(updateArgs, { where: { id } });
   },
 
   deleteProduct(id) {
