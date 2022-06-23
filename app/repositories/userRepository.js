@@ -9,11 +9,7 @@ module.exports = {
     });
   },
   findById(id) {
-    return users.findOne({
-      where: {
-        id,
-      },
-    });
+    return users.findByPk(id);
   },
   create(data) {
     return users.create(data);

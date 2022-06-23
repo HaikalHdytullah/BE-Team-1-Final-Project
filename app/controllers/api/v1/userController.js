@@ -49,33 +49,43 @@ module.exports = {
   async updateProfile(req, res) {
     try {
       const { id, nama, kota, alamat, noHp } = req.body;
-      let fotoProfile = "";
-      let fileBase64 = "";
-      let file = "";
+      let fotoProfile;
+      let fileBase64;
+      let file;
 
       const user = await userService.findById(id);
       const user_data = JSON.parse(JSON.stringify(user));
 
-      // Delete Image from Cloudinary
-      let cloudImage = user_data.gambar.substring(62, 82);
-      if (user.gambar !== "") {
-        cloudinaryDestroy(cloudImage);
+      if (req.file) {
+        // Delete Image from Cloudinary
+        if (user.gambar !== null) {
+          let cloudImage = user_data.gambar.substring(62, 82);
+          cloudinaryDestroy(cloudImage);
+        }
+        // Upload New Image to Cloudinary
+        fileBase64 = req.file.buffer.toString("base64");
+        file = `data:${req.file.mimetype};base64,${fileBase64}`;
+        const resultImage = await cloudinaryUpload(file);
+        fotoProfile = resultImage.secure_url;
+        await userService.update(id, {
+          nama,
+          kota,
+          alamat,
+          noHp,
+          gambar: fotoProfile,
+        });
+        return res.status(200).json({
+          status: "OK",
+          message: "Profile berhasil diperbarui",
+        });
       }
-
-      // Upload New Image to Cloudinary
-      fileBase64 = req.file.buffer.toString("base64");
-      file = `data:${req.file.mimetype};base64,${fileBase64}`;
-      const resultImage = await cloudinaryUpload(file);
-      fotoProfile = resultImage.secure_url;
 
       await userService.update(id, {
         nama,
         kota,
         alamat,
         noHp,
-        gambar: fotoProfile,
       });
-
       res.status(200).json({
         status: "OK",
         message: "Profile berhasil diperbarui",
