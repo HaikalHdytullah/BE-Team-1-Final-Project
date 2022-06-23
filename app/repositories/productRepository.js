@@ -12,7 +12,7 @@ module.exports = {
   },
 
   findProduct(id) {
-    return products.findByPk({ where: { iduser: id } });
+    return products.findByPk(id, { include: [{ model: productpics }] });
   },
 
   findProductPicAll() {

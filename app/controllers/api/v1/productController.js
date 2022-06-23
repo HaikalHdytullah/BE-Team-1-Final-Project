@@ -53,8 +53,11 @@ module.exports = {
         });
       }
 
+      const response_data = await productService.findById(product_data.id);
+
       res.status(200).json({
         message: "tambah produk berhasil",
+        product: response_data,
       });
     } catch (error) {
       res.status(400).json({
