@@ -15,8 +15,14 @@ module.exports = {
     return products.findByPk({ where: { iduser: id } });
   },
 
-  findProductPicAll(){
+  findProductPicAll() {
     return productpics.findAll();
+  },
+
+  findProductPicByIdProduct(id) {
+    return productpics.findAll({
+      where: { idProduct: id },
+    });
   },
 
   findProductPic(id) {
@@ -45,5 +51,5 @@ module.exports = {
 
   deleteProductPic(id) {
     return productpics.destroy({ where: { idProduct: id } });
-  }
+  },
 };

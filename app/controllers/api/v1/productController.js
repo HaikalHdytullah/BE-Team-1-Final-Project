@@ -71,48 +71,39 @@ module.exports = {
       let file = [];
       const id = req.params.id;
       const product = {
-        // id: req.params.id,
-        idUser: req.body.idUser,
         nama: req.body.nama,
         harga: req.body.harga,
         kategori: req.body.kategori,
         deskripsi: req.body.deskripsi,
         minat: false,
       };
-      await productService.updateProduct(
-        id,
-        product
-      );
+      await productService.updateProduct(id, product);
+      const productPic = await productService.findProductPicByIdProduct(id);
+      let cloudImage;
 
-      // Delete Image from Cloudinary
-      const product_pic = await productService.findProductPic(product.id);
-      for (var i = 0; i < product_pic.length; i++) {
-        await cloudinaryDestroy(product_pic[i].gambar);
-      }
-
-      // Delete image
-      // 
-
-      // Delete Image from Cloudinary
-
-      const delete_pic = await productService.deleteProductPic(id);
-
-      if (delete_pic) {
+      if (req.files.length > 0) {
+        if (productPic.length > 0) {
+          for (var i = 0; i < productPic.length; i++) {
+            cloudImage = productPic[i].gambar.substring(62, 82);
+            cloudinaryDestroy(cloudImage);
+          }
+        }
+        await productService.deleteProductPic(id);
         for (var i = 0; i < req.files.length; i++) {
           fileBase64.push(req.files[i].buffer.toString("base64"));
           file.push(`data:${req.files[i].mimetype};base64,${fileBase64[i]}`);
           const result = await cloudinaryUpload(file[i]);
           fotoProduk.push(result.secure_url);
           await productService.addProductPic({
-            idProduct: product.id,
+            idProduct: productPic.id,
             gambar: fotoProduk[i],
           });
         }
       }
 
-      // Add Image to Cloudinary
-      
-
+      res.status(200).json({
+        message: "produk berhasil diperbaharui",
+      });
     } catch (error) {
       res.status(400).json({
         message: error.message,
@@ -133,5 +124,5 @@ module.exports = {
         message: error.message,
       });
     }
-  }
+  },
 };

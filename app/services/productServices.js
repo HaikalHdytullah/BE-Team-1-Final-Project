@@ -22,6 +22,10 @@ module.exports = {
     return productRepository.findProductPic(id);
   },
 
+  async findProductPicByIdProduct(id) {
+    return productRepository.findProductPicByIdProduct(id);
+  },
+
   async addProduct(requestBody) {
     return productRepository.addProduct(requestBody);
   },
@@ -30,8 +34,8 @@ module.exports = {
     return productRepository.addProductPic(requestBody);
   },
 
-  async updateProduct(id, requestBody) {
-    return productRepository.updateProduct(id, requestBody);
+  async updateProduct(idProduct, requestBody) {
+    return productRepository.updateProduct(idProduct, requestBody);
   },
 
   async updateProductPic(id, requestBody) {
@@ -44,5 +48,5 @@ module.exports = {
 
   async deleteProductPic(id) {
     return productRepository.deleteProductPic(id);
-  }
+  },
 };
