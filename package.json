@@ -18,7 +18,7 @@
     "db:migrate": "./node_modules/.bin/sequelize-cli db:migrate",
     "db:rollback": "./node_modules/.bin/sequelize-cli db:migrate:undo:all",
     "db:seed": "./node_modules/.bin/sequelize-cli db:seed:undo:all && ./node_modules/.bin/sequelize-cli db:seed:all",
-    "db:reset": "yarn db:rollback && yarn db:migrate && yarn db:seed"
+    "db:reset": "yarn db:rollback && yarn db:migrate"
   },
   "dependencies": {
     "axios": "^0.27.2",
