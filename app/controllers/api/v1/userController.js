@@ -49,12 +49,12 @@ module.exports = {
   },
   async updateProfile(req, res) {
     try {
-      const { id, nama, kota, alamat, noHp } = req.body;
+      const { idUser, nama, kota, alamat, noHp } = req.body;
       let fotoProfile;
       let fileBase64;
       let file;
 
-      const user = await userService.findById(id);
+      const user = await userService.findById(idUser);
       const user_data = JSON.parse(JSON.stringify(user));
 
       if (req.file) {
@@ -68,7 +68,7 @@ module.exports = {
         file = `data:${req.file.mimetype};base64,${fileBase64}`;
         const resultImage = await cloudinaryUpload(file);
         fotoProfile = resultImage.secure_url;
-        await userService.update(id, {
+        await userService.update(idUser, {
           nama,
           kota,
           alamat,
@@ -78,18 +78,22 @@ module.exports = {
         return res.status(200).json({
           status: "OK",
           message: "Profile berhasil diperbarui",
+          data: JSON.parse(JSON.stringify(user)),
         });
       }
 
-      await userService.update(id, {
+      await userService.update(idUser, {
         nama,
         kota,
         alamat,
         noHp,
       });
+
+      delete userInfoData.password;
       res.status(200).json({
         status: "OK",
         message: "Profile berhasil diperbarui",
+        data: JSON.parse(JSON.stringify(user)),
       });
     } catch (error) {
       res.status(500).json({
