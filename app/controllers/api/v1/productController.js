@@ -26,6 +26,82 @@ module.exports = {
     }
   },
 
+  async getProductsByMinatAndSeller(req, res) {
+    try {
+      if (req.query.minat === "t") {
+        try {
+          const data = await productService.findByMinat(
+            req.query.idUser,
+            req.query.minat
+          );
+          console.log(!data);
+          if (data === []) {
+            res.status(404).json({
+              message: "Data produk kosong",
+            });
+          }
+          res.status(200).json({
+            data,
+          });
+        } catch (error) {
+          res.status(500).json({
+            error: error.message,
+          });
+        }
+      } else {
+        try {
+          const data = await productService.findByUser(req.query.idUser);
+          res.status(200).json({
+            data,
+          });
+        } catch (error) {
+          res.status(500).json({
+            error: error.message,
+          });
+        }
+      }
+    } catch (error) {
+      res.status(500).json({
+        error: error.message,
+      });
+    }
+  },
+
+  async getProductById(req, res) {
+    try {
+      const product = await productService.findById(req.query.id);
+      res.status(200).json(product);
+    } catch (error) {
+      res.status(500).json({
+        error: error.message,
+      });
+    }
+  },
+
+  async getProductByKategory(req, res) {
+    try {
+      const product = await productService.findByKategory(req.query.kategori);
+      res.status(200).json(product);
+    } catch (error) {
+      res.status(500).json({
+        error: error.message,
+      });
+    }
+  },
+
+  async getProductByName(req, res) {
+    try {
+      const nama = req.query.nama.toLowerCase();
+      const product = await productService.findByName(nama);
+      res.status(200).json(product);
+    } catch (error) {
+      res.status(500).json({
+        error: error.message,
+      });
+      console.log(error);
+    }
+  },
+
   // add product
   async addProduct(req, res) {
     try {
@@ -118,7 +194,7 @@ module.exports = {
   async deleteProduct(req, res) {
     try {
       const id = req.params.id;
-      
+
       const productPic = await productService.findProductPicByIdProduct(id);
       let cloudImage;
 
@@ -130,7 +206,7 @@ module.exports = {
       }
       await productService.deleteProductPic(id);
       await productService.deleteProduct(id);
-      
+
       res.status(200).json({
         message: "delete product berhasil",
       });

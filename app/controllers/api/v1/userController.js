@@ -1,5 +1,6 @@
 const userService = require("../../../services/userService");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const { promisify } = require("util");
 const cloudinary = require("../../../../utils/cloudinary");
@@ -93,6 +94,30 @@ module.exports = {
     } catch (error) {
       res.status(500).json({
         error: error.message,
+      });
+    }
+  },
+
+  async whoAmI(req, res) {
+    try {
+      const bearerToken = req.headers.authorization;
+      const token = bearerToken.split("Bearer ")[1];
+      const tokenPayload = jwt.verify(token, process.env.JWT_SIGNATURE_KEY);
+
+      const user = JSON.parse(
+        JSON.stringify(await userService.findByEmail(tokenPayload.email))
+      );
+      delete user.password;
+
+      res.json({ user });
+    } catch (error) {
+      if (error.message.includes("jwt expired")) {
+        res.status(401).json({ message: "Token Expired" });
+        return;
+      }
+      res.status(400).json({
+        status: "FAIL",
+        message: error.message,
       });
     }
   },

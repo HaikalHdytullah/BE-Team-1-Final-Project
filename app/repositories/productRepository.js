@@ -1,4 +1,5 @@
 const { products, productpics } = require("../models");
+const { Op } = require("sequelize");
 
 module.exports = {
   findAll() {
@@ -13,6 +14,46 @@ module.exports = {
 
   findProduct(id) {
     return products.findByPk(id, { include: [{ model: productpics }] });
+  },
+
+  findByName(nama) {
+    return products.findAll({
+      where: {
+        nama: {
+          [Op.iLike]: `%${nama}%`,
+        },
+      },
+      include: [{ model: productpics }],
+    });
+  },
+
+  findByMinat(idUser, minat) {
+    return products.findAll({
+      where: {
+        [Op.and]: [{ idUser }, { minat }],
+      },
+      include: [{ model: productpics }],
+    });
+  },
+
+  findByUser(idUser) {
+    return products.findAll({
+      where: { idUser },
+      include: [{ model: productpics }],
+    });
+  },
+  findByKategory(kategori) {
+    return products.findAll({
+      where: { kategori },
+      include: [{ model: productpics }],
+    });
+  },
+
+  findByUser(idUser) {
+    return products.findAll({
+      where: { idUser },
+      include: [{ model: productpics }],
+    });
   },
 
   findProductPicByIdProduct(id) {

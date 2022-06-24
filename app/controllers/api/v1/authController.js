@@ -4,7 +4,9 @@ const bcrypt = require("bcrypt");
 const axios = require("axios");
 
 function createToken(user) {
-  return jwt.sign(user, process.env.JWT_SIGNATURE_KEY);
+  return jwt.sign(user, process.env.JWT_SIGNATURE_KEY, {
+    expiresIn: "1h",
+  });
 }
 
 module.exports = {
@@ -44,11 +46,7 @@ module.exports = {
         updatedAt: user.updatedAt,
       });
 
-      const user_data = JSON.parse(JSON.stringify(user));
-      delete user_data.password;
-
       res.status(201).json({
-        user: user_data,
         token,
       });
     } catch (err) {
