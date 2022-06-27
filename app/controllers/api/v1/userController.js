@@ -89,7 +89,6 @@ module.exports = {
         noHp,
       });
 
-      delete userInfoData.password;
       res.status(200).json({
         status: "OK",
         message: "Profile berhasil diperbarui",
