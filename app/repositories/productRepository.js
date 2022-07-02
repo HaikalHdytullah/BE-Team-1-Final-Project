@@ -44,7 +44,11 @@ module.exports = {
   },
   findByKategory(kategori) {
     return products.findAll({
-      where: { kategori },
+      where: {
+        kategori: {
+          [Op.iLike]: `${kategori}`,
+        },
+      },
       include: [{ model: productpics }],
     });
   },
