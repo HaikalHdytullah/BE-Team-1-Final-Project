@@ -66,7 +66,7 @@ module.exports = {
         const token = bearerToken.split("Bearer ")[1];
         const tokenPayload = jwt.verify(token, process.env.JWT_SIGNATURE_KEY);
 
-        req.user = await userService.find(tokenPayload.id);
+        req.user = await userService.findById(tokenPayload.id);
 
         if (roles.length > 0) {
           if (!roles.includes(req.user.idType)) {

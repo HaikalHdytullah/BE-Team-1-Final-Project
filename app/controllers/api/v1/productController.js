@@ -109,7 +109,7 @@ module.exports = {
       let fileBase64 = [];
       let file = [];
       const product = {
-        idUser: req.body.idUser,
+        idUser: req.user.id,
         nama: req.body.nama,
         harga: req.body.harga,
         kategori: req.body.kategori,

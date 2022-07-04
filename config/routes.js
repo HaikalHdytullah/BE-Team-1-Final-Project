@@ -23,6 +23,10 @@ apiRouter.put(
 // Define Routes Products
 apiRouter.get("/api/v1/products", controllers.api.v1.productController.listAll);
 apiRouter.get(
+  "/api/v1/product",
+  controllers.api.v1.productController.getProductById
+);
+apiRouter.get(
   "/api/v1/product/kategory",
   controllers.api.v1.productController.getProductByKategory
 );
@@ -37,18 +41,21 @@ apiRouter.get(
 // add product
 apiRouter.post(
   "/api/v1/products",
+  controllers.api.v1.authController.authorize(1, 2),
   uploadOnMemory.array("gambar", 4),
   controllers.api.v1.productController.addProduct
 );
 // update product
 apiRouter.put(
   "/api/v1/products/:id",
+  controllers.api.v1.authController.authorize(1, 2),
   uploadOnMemory.array("gambar", 4),
   controllers.api.v1.productController.updateProduct
 );
 // delete product
 apiRouter.delete(
   "/api/v1/products/:id",
+  controllers.api.v1.authController.authorize(1, 2),
   controllers.api.v1.productController.deleteProduct
 );
 
