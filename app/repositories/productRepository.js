@@ -1,4 +1,4 @@
-const { products, productpics } = require("../models");
+const { products, productpics, users } = require("../models");
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -13,7 +13,9 @@ module.exports = {
   },
 
   findProduct(id) {
-    return products.findByPk(id, { include: [{ model: productpics }] });
+    return products.findByPk(id, {
+      include: [{ model: productpics }, { model: users }],
+    });
   },
 
   findByName(nama) {
