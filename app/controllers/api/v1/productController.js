@@ -70,7 +70,9 @@ module.exports = {
   async getProductById(req, res) {
     try {
       const product = await productService.findById(req.query.id);
-      res.status(200).json(product);
+      const product_data = JSON.parse(JSON.stringify(product));
+      delete product_data.user.password;
+      res.status(200).json(product_data);
     } catch (error) {
       res.status(500).json({
         error: error.message,
