@@ -85,6 +85,6 @@ module.exports = {
   },
 
   deleteProductPic(id) {
-    return productpics.destroy({ where: { idProduct: id } });
+    return productpics.destroy({ where: { id } });
   },
 };

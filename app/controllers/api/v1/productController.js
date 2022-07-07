@@ -70,9 +70,15 @@ module.exports = {
   async getProductById(req, res) {
     try {
       const product = await productService.findById(req.query.id);
-      const product_data = JSON.parse(JSON.stringify(product));
-      delete product_data.user.password;
-      res.status(200).json(product_data);
+      if (product !== null) {
+        const product_data = JSON.parse(JSON.stringify(product));
+        delete product_data.user.password;
+        res.status(200).json(product_data);
+      } else {
+        res.status(404).json({
+          message: "product not found",
+        });
+      }
     } catch (error) {
       res.status(500).json({
         error: error.message,
@@ -132,10 +138,12 @@ module.exports = {
       }
 
       const response_data = await productService.findById(product_data.id);
+      const product_data_update = JSON.parse(JSON.stringify(response_data));
+      delete product_data_update.user.password;
 
       res.status(200).json({
         message: "tambah produk berhasil",
-        product: response_data,
+        product: product_data_update,
       });
     } catch (error) {
       res.status(400).json({
@@ -150,7 +158,7 @@ module.exports = {
       let fotoProduk = [];
       let fileBase64 = [];
       let file = [];
-      const id = req.params.id;
+      const idProduct = req.params.id;
       const product = {
         nama: req.body.nama,
         harga: req.body.harga,
@@ -158,28 +166,32 @@ module.exports = {
         deskripsi: req.body.deskripsi,
         minat: false,
       };
-      await productService.updateProduct(id, product);
-      const productPic = await productService.findProductPicByIdProduct(id);
+      await productService.updateProduct(idProduct, product);
+      const productPic = await productService.findProductPicByIdProduct(
+        idProduct
+      );
       let cloudImage;
-
-      if (req.files.length > 0) {
-        if (productPic.length > 0) {
-          for (var i = 0; i < productPic.length; i++) {
-            cloudImage = productPic[i].gambar.substring(62, 82);
-            cloudinaryDestroy(cloudImage);
+      for (var i = 0; i < req.body.tempImage.length; i++) {
+        if (!req.body.tempImage[i].includes("cloudinary")) {
+          if (req.files.length > 0) {
+            if (productPic.length > i) {
+              cloudImage = productPic[i].gambar.substring(62, 82);
+              cloudinaryDestroy(cloudImage);
+            }
           }
+
+          await productService.deleteProductPic(productPic[i].id);
         }
-        await productService.deleteProductPic(id);
-        for (var i = 0; i < req.files.length; i++) {
-          fileBase64.push(req.files[i].buffer.toString("base64"));
-          file.push(`data:${req.files[i].mimetype};base64,${fileBase64[i]}`);
-          const result = await cloudinaryUpload(file[i]);
-          fotoProduk.push(result.secure_url);
-          await productService.addProductPic({
-            idProduct: id,
-            gambar: fotoProduk[i],
-          });
-        }
+      }
+      for (var i = 0; i < req.files.length; i++) {
+        fileBase64.push(req.files[i].buffer.toString("base64"));
+        file.push(`data:${req.files[i].mimetype};base64,${fileBase64[i]}`);
+        const result = await cloudinaryUpload(file[i]);
+        fotoProduk.push(result.secure_url);
+        await productService.addProductPic({
+          idProduct,
+          gambar: fotoProduk[i],
+        });
       }
 
       res.status(200).json({
