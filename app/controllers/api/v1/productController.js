@@ -166,24 +166,38 @@ module.exports = {
         deskripsi: req.body.deskripsi,
         minat: false,
       };
-      await productService.updateProduct(idProduct, product);
+      const imgTemp = req.body.imgTemp;
+
+      // Get Gambar Produk dari tabel productpics
       const productPic = await productService.findProductPicByIdProduct(
         idProduct
       );
-      let cloudImage;
-      for (var i = 0; i < req.body.tempImage.length; i++) {
-        if (!req.body.tempImage[i].includes("cloudinary")) {
-          if (req.files.length > 0) {
-            if (productPic.length > i) {
-              cloudImage = productPic[i].gambar.substring(62, 82);
-              cloudinaryDestroy(cloudImage);
+      // Update Data Produk di tabel products
+      await productService.updateProduct(idProduct, product);
+
+      // Delete Gambar Produk di tabel productpics dan Cloudinary
+      if (imgTemp !== undefined) {
+        if (Array.isArray(imgTemp)) {
+          // Kalo bentuknya array
+          for (let x = 0; x < imgTemp.length; x++) {
+            cloudinaryDestroy(imgTemp[x].substring(65, 85));
+            if (imgTemp[x] === productPic[x].gambar) {
+              await productService.deleteProductPic(productPic[x].id);
             }
           }
-
-          await productService.deleteProductPic(productPic[i].id);
+        } else {
+          // Kalo bentuknya string cuma 1 image
+          for (let y = 0; y < productPic.length; y++) {
+            if (imgTemp === productPic[y].gambar) {
+              cloudinaryDestroy(imgTemp.substring(65, 85));
+              await productService.deleteProductPic(productPic[y].id);
+            }
+          }
         }
       }
-      for (var i = 0; i < req.files.length; i++) {
+
+      // Upload Gambar Produk ke Cloudinary dan Tambahkan ke tabel productpics
+      for (let i = 0; i < req.files.length; i++) {
         fileBase64.push(req.files[i].buffer.toString("base64"));
         file.push(`data:${req.files[i].mimetype};base64,${fileBase64[i]}`);
         const result = await cloudinaryUpload(file[i]);
