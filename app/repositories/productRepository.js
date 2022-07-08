@@ -81,10 +81,13 @@ module.exports = {
   },
 
   deleteProduct(id) {
-    return products.destroy({ where: { id } });
+    return products.destroy({
+      where: { id },
+      include: [{ model: productpics }],
+    });
   },
 
   deleteProductPic(id) {
-    return productpics.destroy({ where: { id } });
+    return productpics.destroy({ where: { idProduct: id } });
   },
 };
