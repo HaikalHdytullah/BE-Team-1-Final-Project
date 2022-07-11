@@ -37,13 +37,15 @@ module.exports = {
       include: [{ model: productpics }],
     });
   },
-
-  findByUser(idUser) {
+  findByTerjual(idUser, terjual) {
     return products.findAll({
-      where: { idUser },
+      where: {
+        [Op.and]: [{ idUser }, { terjual }],
+      },
       include: [{ model: productpics }],
     });
   },
+
   findByKategory(kategori) {
     return products.findAll({
       where: {
@@ -55,11 +57,29 @@ module.exports = {
     });
   },
 
-  findByUser(idUser) {
-    return products.findAll({
-      where: { idUser },
-      include: [{ model: productpics }],
-    });
+  findByUser(params) {
+    if (params.minat === true) {
+      return products.findAll({
+        where: {
+          [Op.and]: [{ idUser: params.idUser }, { minat: params.minat }],
+        },
+        include: [{ model: productpics }],
+      });
+    } else if (params.terjual === false || params.terjual === true) {
+      return products.findAll({
+        where: {
+          [Op.and]: [{ idUser: params.idUser }, { terjual: params.terjual }],
+        },
+        include: [{ model: productpics }],
+      });
+    } else {
+      return products.findAll({
+        where: {
+          idUser: params.idUser,
+        },
+        include: [{ model: productpics }],
+      });
+    }
   },
 
   findProductPicByIdProduct(id) {

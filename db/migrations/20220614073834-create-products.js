@@ -30,6 +30,9 @@ module.exports = {
       minat: {
         type: Sequelize.BOOLEAN,
       },
+      terjual: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

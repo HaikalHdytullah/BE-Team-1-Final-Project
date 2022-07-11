@@ -23,6 +23,10 @@ apiRouter.put(
 // Define Routes Products
 apiRouter.get("/api/v1/products", controllers.api.v1.productController.listAll);
 apiRouter.get(
+  "/api/v1/daftarjual",
+  controllers.api.v1.productController.getProductByIdSeller
+);
+apiRouter.get(
   "/api/v1/product",
   controllers.api.v1.productController.getProductById
 );
@@ -32,7 +36,7 @@ apiRouter.get(
 );
 apiRouter.get(
   "/api/v1/product/minat",
-  controllers.api.v1.productController.getProductsByMinatAndSeller
+  controllers.api.v1.productController.getProductsByMinatAndSellerAndTerjual
 );
 apiRouter.get(
   "/api/v1/product/name",

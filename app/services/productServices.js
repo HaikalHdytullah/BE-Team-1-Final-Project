@@ -14,6 +14,11 @@ module.exports = {
       throw error;
     }
   },
+
+  getProductByIdSeller(idUser) {
+    return productRepository.findByIdUser(idUser);
+  },
+
   async findByName(nama) {
     try {
       return productRepository.findByName(nama);
@@ -29,9 +34,16 @@ module.exports = {
       throw error;
     }
   },
-  async findByUser(idUser) {
+  async findByTerjual(idUser, terjual) {
     try {
-      return productRepository.findByUser(idUser);
+      return productRepository.findByTerjual(idUser, terjual);
+    } catch (error) {
+      throw error;
+    }
+  },
+  async findByUser(params) {
+    try {
+      return productRepository.findByUser(params);
     } catch (error) {
       throw error;
     }

@@ -26,40 +26,57 @@ module.exports = {
     }
   },
 
-  async getProductsByMinatAndSeller(req, res) {
+  // get product by id seller
+  async getProductByIdSeller(req, res) {
     try {
-      if (req.query.minat === "t") {
-        try {
-          const data = await productService.findByMinat(
-            req.query.idUser,
-            req.query.minat
-          );
-          console.log(!data);
-          if (data === []) {
-            res.status(404).json({
-              message: "Data produk kosong",
-            });
-          }
-          res.status(200).json({
-            data,
-          });
-        } catch (error) {
-          res.status(500).json({
-            error: error.message,
-          });
-        }
-      } else {
-        try {
-          const data = await productService.findByUser(req.query.idUser);
-          res.status(200).json({
-            data,
-          });
-        } catch (error) {
-          res.status(500).json({
-            error: error.message,
-          });
-        }
+      const product = await productService.getProductByIdSeller(
+        req.query.idUser
+      );
+      if (product.totalBarang === 0) {
+        res.status(404).json({
+          message: "Product is Empty",
+        });
+        return;
       }
+      res.status(200).json({
+        data: product,
+      });
+    } catch (error) {
+      res.status(400).json({
+        message: error.message,
+      });
+    }
+  },
+
+  async getProductsByMinatAndSellerAndTerjual(req, res) {
+    try {
+      let minat, terjual;
+      if (req.query.minat === "t") {
+        minat = true;
+      } else {
+        minat = false;
+      }
+      if (req.query.terjual === "t") {
+        terjual = true;
+      } else {
+        terjual = false;
+      }
+      const args = {
+        idUser: req.query.idUser,
+        minat,
+        terjual,
+      };
+      const data = await productService.findByUser(args);
+      if (data.length === 0) {
+        res.status(404).json({
+          message: "Product is Empty",
+        });
+        return;
+      }
+      res.status(200).json({
+        data,
+        status: "Get All By IdUser And Status",
+      });
     } catch (error) {
       res.status(500).json({
         error: error.message,
@@ -106,7 +123,6 @@ module.exports = {
       res.status(500).json({
         error: error.message,
       });
-      console.log(error);
     }
   },
 
