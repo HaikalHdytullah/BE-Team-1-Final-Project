@@ -1,114 +1,56 @@
 const productRepository = require("../repositories/productRepository");
 
 module.exports = {
-  // aman
-  async list() {
-    try {
-      const products = await productRepository.findAll();
-      const totalBarang = await productRepository.getTotalProducts();
-      return {
-        products,
-        totalBarang,
-      };
-    } catch (error) {
-      throw error;
-    }
-  },
+    async list() {
+        const products = await productRepository.findAll();
+        const totalBarang = await productRepository.getTotalProducts();
+        return {
+            products,
+            totalBarang,
+        };
+    },
 
-  getProductByIdSeller(idUser) {
-    return productRepository.findByIdUser(idUser);
-  },
+    async getProductByIdSeller(idUser) {
+        return await productRepository.findByIdUser(idUser);
+    },
 
-  async findByName(nama) {
-    try {
-      return productRepository.findByName(nama);
-    } catch (error) {
-      throw error;
-    }
-  },
+    async findByName(nama) {
+        return await productRepository.findByName(nama);
+    },
 
-  async findByMinat(idUser, minat) {
-    try {
-      return productRepository.findByMinat(idUser, minat);
-    } catch (error) {
-      throw error;
-    }
-  },
-  async findByTerjual(idUser, terjual) {
-    try {
-      return productRepository.findByTerjual(idUser, terjual);
-    } catch (error) {
-      throw error;
-    }
-  },
-  async findByUser(params) {
-    try {
-      return productRepository.findByUser(params);
-    } catch (error) {
-      throw error;
-    }
-  },
-  async findByKategory(kategori) {
-    try {
-      return productRepository.findByKategory(kategori);
-    } catch (error) {
-      throw error;
-    }
-  },
+    async findByUser(params) {
+        return await productRepository.findByUser(params);
+    },
 
-  async findById(id) {
-    try {
-      return productRepository.findProduct(id);
-    } catch (error) {
-      throw error;
-    }
-  },
+    async findByKategory(kategori) {
+        return await productRepository.findByKategory(kategori);
+    },
 
-  async findProductPicByIdProduct(id) {
-    try {
-      return productRepository.findProductPicByIdProduct(id);
-    } catch (error) {
-      throw error;
-    }
-  },
+    async findById(id) {
+        return await productRepository.findProduct(id);
+    },
 
-  async addProduct(requestBody) {
-    try {
-      return productRepository.addProduct(requestBody);
-    } catch (error) {
-      throw error;
-    }
-  },
+    async findProductPicByIdProduct(id) {
+        return await productRepository.findProductPicByIdProduct(id);
+    },
 
-  async addProductPic(requestBody) {
-    try {
-      return productRepository.addProductPic(requestBody);
-    } catch (error) {
-      throw error;
-    }
-  },
+    async addProduct(requestBody) {
+        return await productRepository.addProduct(requestBody);
+    },
 
-  async updateProduct(idProduct, requestBody) {
-    try {
-      return productRepository.updateProduct(idProduct, requestBody);
-    } catch (error) {
-      throw error;
-    }
-  },
+    async addProductPic(requestBody) {
+        return await productRepository.addProductPic(requestBody);
+    },
 
-  async deleteProduct(id) {
-    try {
-      return productRepository.deleteProduct(id);
-    } catch (error) {
-      throw error;
-    }
-  },
+    async updateProduct(idProduct, requestBody) {
+        return await productRepository.updateProduct(idProduct, requestBody);
+    },
 
-  async deleteProductPic(id) {
-    try {
-      return productRepository.deleteProductPic(id);
-    } catch (error) {
-      throw error;
-    }
-  },
+    async deleteProduct(id) {
+        return await productRepository.deleteProduct(id);
+    },
+
+    async deleteProductPic(id) {
+        return await productRepository.deleteProductPic(id);
+    },
 };
