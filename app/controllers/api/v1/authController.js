@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const axios = require("axios");
 
 function createToken(user) {
-  return jwt.sign(user, process.env.JWT_SIGNATURE_KEY, {
+  return jwt.sign(user, process.env.JWT_SIGNATURE_KEY || "team1", {
     expiresIn: "1h",
   });
 }
@@ -64,7 +64,10 @@ module.exports = {
       try {
         const bearerToken = req.headers.authorization;
         const token = bearerToken.split("Bearer ")[1];
-        const tokenPayload = jwt.verify(token, process.env.JWT_SIGNATURE_KEY);
+        const tokenPayload = jwt.verify(
+          token,
+          process.env.JWT_SIGNATURE_KEY || "team1"
+        );
 
         req.user = await userService.findById(tokenPayload.id);
 
