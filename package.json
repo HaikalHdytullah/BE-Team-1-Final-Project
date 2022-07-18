@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node -r dotenv/config bin/www",
     "build": "yarn db:migrate",
-    "test": "jest",
+    "test": "jest ",
     "eslint": "eslint .",
     "develop": "nodemon -r dotenv/config bin/www",
     "db:create": "sequelize db:create",

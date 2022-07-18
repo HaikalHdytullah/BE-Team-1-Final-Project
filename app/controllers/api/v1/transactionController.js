@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 function verifyToken(token) {
     try {
-        return jwt.verify(token, "team1");
+        return jwt.verify(token, process.env.JWT_SIGNATURE_KEY || "team1");
     } catch (error) {
         return false;
     }
