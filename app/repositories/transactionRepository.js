@@ -57,7 +57,6 @@ module.exports = {
     },
 
     async updateStatus(args) {
-        console.log(args);
         const {id, idProduk, status, terjual} = args;
         await products.update({terjual: terjual}, {where: {id: idProduk}});
         await transactions.update({status: status}, {where: {id: id}});
