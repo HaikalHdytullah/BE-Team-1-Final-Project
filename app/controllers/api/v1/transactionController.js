@@ -1,20 +1,8 @@
 const transactionService = require("../../../services/transactionService");
-const jwt = require("jsonwebtoken");
-
-function verifyToken(token) {
-  try {
-    return jwt.verify(token, process.env.JWT_SIGNATURE_KEY || "team1");
-  } catch (error) {
-    return false;
-  }
-}
 
 module.exports = {
   getByIdBuyer: async (req, res) => {
-    const bearerToken = req.headers.authorization;
-    const token = bearerToken.split("Bearer ")[1];
-    let tokenPayload = await verifyToken(token);
-    const idUser = tokenPayload.id;
+    const idUser = req.user.id;
 
     try {
       transactionService.getByIdBuyer(idUser).then((transactions) => {
@@ -32,10 +20,7 @@ module.exports = {
   },
 
   getByIdSeller: async (req, res) => {
-    const bearerToken = req.headers.authorization;
-    const token = bearerToken.split("Bearer ")[1];
-    let tokenPayload = await verifyToken(token);
-    const idSeller = tokenPayload.id;
+    const idSeller = req.user.id;
 
     try {
       transactionService.getByIdSeller(idSeller).then((transactions) => {

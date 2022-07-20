@@ -1,0 +1,1075 @@
+openapi: 3.0.1
+info:
+  title: Second Hands
+  description: "Team 1 Final Project - Second Hands"
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+  - url: https://staging-team1.herokuapp.com
+  - url: https://be-production-team1.herokuapp.com
+tags:
+  - name: Auth
+    description:
+  - name: User
+    description:
+  - name: Product
+    description:
+  - name: Transaction
+    description:
+paths:
+  # Auth
+  # Login
+  /api/v1/login:
+    post:
+      tags:
+        - Auth
+      summary: Login to Server
+      requestBody:
+        description: Object combination of email and password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@gmail.com
+                password:
+                  type: string
+                  example: 123
+        required: true
+      responses:
+        201:
+          description: Login Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email tidak ditemukan
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Password tidak sesuai
+  # Who Am I
+  /api/v1/whoami:
+    get:
+      tags:
+        - Auth
+      summary: Check User Data
+      responses:
+        200:
+          description: Data fetched
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/register"
+        401:
+          description: Token Expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token Expired
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: FAIL
+                  message:
+                    type: string
+                    example: jwt malformed
+      security:
+        - bearerAuth: []
+  # Register
+  /api/v1/register:
+    post:
+      tags:
+        - User
+      summary: Register Account
+      requestBody:
+        description: Object combination of nama, email, and password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nama:
+                  type: string
+                  example: example
+                email:
+                  type: string
+                  example: exampleUser@gmail.com
+                password:
+                  type: string
+                  example: 123
+        required: true
+      responses:
+        201:
+          description: Register Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/register"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email already exist
+  # Update Profile
+  /api/v1/profile:
+    put:
+      tags:
+        - User
+      summary: Update Profile
+      requestBody:
+        description: Object combination of idUser, nama, kota, alamat, noHp, gambar
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                idUser:
+                  type: integer
+                  example: 2
+                nama:
+                  type: string
+                  example: example name
+                kota:
+                  type: string
+                  example: example city
+                alamat:
+                  type: string
+                  example: example address
+                noHp:
+                  type: string
+                  example: example phone number
+                gambar:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/profile"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User Not Found
+      security:
+        - bearerAuth: []
+
+  # Product
+  # Get All Products and Create Product
+  /api/v1/products:
+    get:
+      tags:
+        - Product
+      summary: Get All Products
+      responses:
+        200:
+          description: Data fetched
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Products"
+        404:
+          description: Products Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product is Empty
+    # Create Product
+    post:
+      tags:
+        - Product
+      summary: Create Product
+      requestBody:
+        description: Object combination of nama, harga, kategori, deskripsi, gambar
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                nama:
+                  type: string
+                  example: example name
+                harga:
+                  type: integer
+                  example: 100000
+                kategori:
+                  type: string
+                  example: Baju
+                deskripsi:
+                  type: string
+                  example: example description
+                gambar:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: OK
+                  product:
+                    allOf:
+                      - $ref: "#/components/schemas/Product"
+                      - $ref: "#/components/schemas/User"
+
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      security:
+        - bearerAuth: []
+  # Update And Delete Product
+  /api/v1/products/{id}:
+    # Update Product
+    put:
+      tags:
+        - Product
+      summary: Update Product
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            example: 2
+      requestBody:
+        description: Object combination of nama, harga, kategori, deskripsi
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                nama:
+                  type: string
+                  example: example name
+                harga:
+                  type: integer
+                  example: 100000
+                kategori:
+                  type: string
+                  example: Baju
+                deskripsi:
+                  type: string
+                  example: example description
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: produk berhasil diperbaharui
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      security:
+        - bearerAuth: []
+    # Delete Product
+    delete:
+      tags:
+        - Product
+      summary: Delete Product
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            example: 2
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: delete produk berhasil
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      security:
+        - bearerAuth: []
+  # Get Product By Name
+  /api/v1/product/name:
+    get:
+      tags:
+        - Product
+      summary: Get Products By Name
+      parameters:
+        - in: query
+          name: nama
+          schema:
+            type: string
+            example: baju
+      responses:
+        200:
+          description: Data fetched
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductByName"
+  # Get Product By Kategory
+  /api/v1/product/kategory:
+    get:
+      tags:
+        - Product
+      summary: Get Products By Kategory
+      parameters:
+        - in: query
+          name: kategori
+          schema:
+            type: string
+            example: Baju
+      responses:
+        200:
+          description: Data fetched
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductByName"
+  # Get Product By Id
+  /api/v1/product:
+    get:
+      tags:
+        - Product
+      summary: Get Products By Id
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+            example: 2
+      responses:
+        200:
+          description: Data fetched
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Product"
+                  - $ref: "#/components/schemas/User"
+  # Get Product By Id Seller, Minat dan Terjual
+  /api/v1/product/minat:
+    get:
+      tags:
+        - Product
+      summary: Get Products By Id
+      parameters:
+        - in: query
+          name: idUser
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: terjual
+          schema:
+            type: boolean
+            example: true
+        - in: query
+          name: minat
+          schema:
+            type: boolean
+            example: true
+      responses:
+        200:
+          description: Data fetched
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductByMinat"
+        404:
+          description: Products Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product is Empty
+
+  # Transaction
+  # Get All Transactions Buyer
+  /api/v1/trBuyer:
+    get:
+      tags:
+        - Transaction
+      summary: Get All Transactions Buyer
+      responses:
+        200:
+          description: Data fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: TR_BUYER
+                  transactions:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: "#/components/schemas/Transactions"
+                        - $ref: "#/components/schemas/Transactions"
+
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal Server Error
+      security:
+        - bearerAuth: []
+  # Get All Transactions Buyer
+  /api/v1/trSeller:
+    get:
+      tags:
+        - Transaction
+      summary: Get All Transactions Seller
+      responses:
+        200:
+          description: Data fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: TR_Seller
+                  transactions:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: "#/components/schemas/Transactions"
+                        - $ref: "#/components/schemas/Transactions"
+
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal Server Error
+      security:
+        - bearerAuth: []
+  # Create Transaction and Update Transaction
+  /api/v1/transaction:
+    post:
+      tags:
+        - Transaction
+      summary: Create Transaction
+      parameters:
+        - in: query
+          name: idUser
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: idProduct
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: penawaran
+          schema:
+            type: integer
+            example: 100000
+        - in: query
+          name: status
+          schema:
+            type: string
+            example: Menunggu
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: OK
+                  transaction:
+                    allOf:
+                      - $ref: "#/components/schemas/Transaction"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal Server Error
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - Transaction
+      summary: Update Transaction
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: status
+          schema:
+            type: string
+            example: Diproses
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: UPDATED
+                  message:
+                    type: string
+                    example: Transaction updated
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal Server Error
+      security:
+        - bearerAuth: []
+  # Finish transaction
+  /api/v1/transaction/status:
+    put:
+      tags:
+        - Transaction
+      summary: Finish Update Transaction
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: idProduk
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: status
+          schema:
+            type: string
+            example: Diproses
+        - in: query
+          name: terjual
+          schema:
+            type: boolean
+            example: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: DONE
+                  message:
+                    type: string
+                    example: Transaction updated
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal Server Error
+      security:
+        - bearerAuth: []
+  # Delete Transaction
+  /api/v1/transaction/{id}:
+    delete:
+      tags:
+        - Transaction
+      summary: Delete Transaction By Id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: DELETE_SUCCESS
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal Server Error
+      security:
+        - bearerAuth: []
+
+#==============================================================================================================
+components:
+  schemas:
+    register:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            nama:
+              type: string
+              example: example name
+            email:
+              type: string
+              example: example@gmail.com
+            alamat:
+              type: string
+              example: example address
+            noHp:
+              type: string
+              example: example phone
+            gambar:
+              type: string
+              example: example picture
+            googleId:
+              type: integer
+              example: 1212533
+            registeredVia:
+              type: string
+              example: example registered via
+            idType:
+              type: integer
+              example: 2
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+    profile:
+      type: object
+      properties:
+        status:
+          type: string
+          example: OK
+        message:
+          type: string
+          example: profile berhasil diperbarui
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            nama:
+              type: string
+              example: example name
+            email:
+              type: string
+              example: example@gmail.com
+            alamat:
+              type: string
+              example: example address
+            noHp:
+              type: string
+              example: example phone
+            gambar:
+              type: string
+              example: example picture
+            googleId:
+              type: integer
+              example: 129763
+            registeredVia:
+              type: string
+              example: example registered via
+            idType:
+              type: integer
+              example: 2
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+    Products:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            products:
+              type: array
+              items:
+                oneOf:
+                  - $ref: "#/components/schemas/Product"
+                  - $ref: "#/components/schemas/Product"
+            totalBarang:
+              type: integer
+              example: 2
+    ProductByName:
+      type: array
+      items:
+        oneOf:
+          - $ref: "#/components/schemas/Product"
+          - $ref: "#/components/schemas/Product"
+    ProductByMinat:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/Product"
+              - $ref: "#/components/schemas/Product"
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        idUser:
+          type: integer
+          example: 2
+        nama:
+          type: string
+          example: example name
+        harga:
+          type: integer
+          example: 100000
+        kategori:
+          type: string
+          example: example kategory
+        deskripsi:
+          type: string
+          example: example description
+        minat:
+          type: boolean
+          example: true
+        terjual:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        productpics:
+          type: array
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/Productpic"
+              - $ref: "#/components/schemas/Productpic"
+    Productpic:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        idProduct:
+          type: integer
+          example: 2
+        gambar:
+          type: string
+          example: example picture
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            nama:
+              type: string
+              example: example name
+            email:
+              type: string
+              example: example@gmail.com
+            alamat:
+              type: string
+              example: example address
+            noHp:
+              type: string
+              example: example phone
+            gambar:
+              type: string
+              example: example picture
+            googleId:
+              type: integer
+              example: 129763
+            registeredVia:
+              type: string
+              example: example registered via
+            idType:
+              type: integer
+              example: 2
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+    Transactions:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        idProduct:
+          type: integer
+          example: 2
+        idUser:
+          type: integer
+          example: 2
+        status:
+          type: string
+          example: Diproses
+        penawaran:
+          type: integer
+          example: 100000
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        product:
+          allOf:
+            - $ref: "#/components/schemas/Product"
+        user:
+          allOf:
+            - $ref: "#/components/schemas/User"
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        idProduct:
+          type: integer
+          example: 2
+        idUser:
+          type: integer
+          example: 2
+        status:
+          type: string
+          example: Diproses
+        penawaran:
+          type: integer
+          example: 100000
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
