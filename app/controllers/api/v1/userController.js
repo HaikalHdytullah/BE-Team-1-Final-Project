@@ -50,12 +50,11 @@ module.exports = {
 
   async updateProfile(req, res) {
     try {
-      const { idUser, nama, kota, alamat, noHp } = req.body;
       let fotoProfile;
       let fileBase64;
       let file;
 
-      const user = await userService.findById(idUser);
+      const user = await userService.findById(req.body.idUser);
       const user_data = JSON.parse(JSON.stringify(user));
       if (user !== null) {
         if (req.file) {
@@ -69,11 +68,11 @@ module.exports = {
           file = `data:${req.file.mimetype};base64,${fileBase64}`;
           const resultImage = await cloudinaryUpload(file);
           fotoProfile = resultImage.secure_url;
-          await userService.update(idUser, {
-            nama,
-            kota,
-            alamat,
-            noHp,
+          await userService.update(req.body.idUser, {
+            nama: req.body.nama,
+            kota: req.body.kota,
+            alamat: req.body.alamat,
+            noHp: req.body.noHp,
             gambar: fotoProfile,
           });
           let data = JSON.parse(JSON.stringify(user));
@@ -85,11 +84,11 @@ module.exports = {
           });
         }
 
-        await userService.update(idUser, {
-          nama,
-          kota,
-          alamat,
-          noHp,
+        await userService.update(req.body.idUser, {
+          nama: req.body.nama,
+          kota: req.body.kota,
+          alamat: req.body.alamat,
+          noHp: req.body.noHp,
         });
 
         let data = JSON.parse(JSON.stringify(user));

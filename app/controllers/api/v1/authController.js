@@ -68,7 +68,6 @@ module.exports = {
           token,
           process.env.JWT_SIGNATURE_KEY || "team1"
         );
-
         req.user = await userService.findById(tokenPayload.id);
 
         if (roles.length > 0) {
