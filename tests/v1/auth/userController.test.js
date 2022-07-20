@@ -162,7 +162,6 @@ describe("User Controller", () => {
   it("UPDATE INFO USER - Berhasil -> response code 200", async () => {
     return await request(app)
       .put("/api/v1/profile")
-      .set("Authorization", `Bearer ${token200}`)
       .attach("gambar", "")
       .field(user)
       .then((res) => {
