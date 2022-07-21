@@ -180,7 +180,7 @@ paths:
                   format: binary
         required: true
       responses:
-        201:
+        200:
           description: Success
           content:
             application/json:
