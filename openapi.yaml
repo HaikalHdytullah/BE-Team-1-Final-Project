@@ -206,7 +206,8 @@ paths:
                   message:
                     type: string
                     example: User Not Found
-
+      security:
+        - bearerAuth: []
   # Product
   # Get All Products and Create Product
   /api/v1/products:
