@@ -59,7 +59,7 @@ module.exports = {
         if (req.file) {
           // Delete Image from Cloudinary
           if (user.gambar !== null) {
-            let cloudImage = user_data.gambar.substring(62, 82);
+            let cloudImage = user.gambar.substring(62, 82);
             cloudinaryDestroy(cloudImage);
           }
           // Upload New Image to Cloudinary
