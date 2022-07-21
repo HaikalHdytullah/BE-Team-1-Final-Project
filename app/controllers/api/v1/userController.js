@@ -54,7 +54,7 @@ module.exports = {
       let fileBase64;
       let file;
 
-      const user = await userService.findById(req.body.idUser);
+      const user = await userService.findById(req.user.id);
       if (user !== null) {
         if (req.file) {
           // Delete Image from Cloudinary
@@ -67,14 +67,14 @@ module.exports = {
           file = `data:${req.file.mimetype};base64,${fileBase64}`;
           const resultImage = await cloudinaryUpload(file);
           fotoProfile = resultImage.secure_url;
-          await userService.update(req.body.idUser, {
+          await userService.update(req.user.id, {
             nama: req.body.nama,
             kota: req.body.kota,
             alamat: req.body.alamat,
             noHp: req.body.noHp,
             gambar: fotoProfile,
           });
-          let user_data = await userService.findById(req.body.idUser);
+          let user_data = await userService.findById(req.user.id);
           let data = JSON.parse(JSON.stringify(user_data));
           delete data.password;
           return res.status(200).json({
@@ -83,13 +83,13 @@ module.exports = {
             data,
           });
         } else {
-          await userService.update(req.body.idUser, {
+          await userService.update(req.user.id, {
             nama: req.body.nama,
             kota: req.body.kota,
             alamat: req.body.alamat,
             noHp: req.body.noHp,
           });
-          let user_data = await userService.findById(req.body.idUser);
+          let user_data = await userService.findById(req.user.id);
           let data = JSON.parse(JSON.stringify(user_data));
           delete data.password;
 

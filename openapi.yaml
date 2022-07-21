@@ -160,9 +160,6 @@ paths:
             schema:
               type: object
               properties:
-                idUser:
-                  type: integer
-                  example: 2
                 nama:
                   type: string
                   example: example name
