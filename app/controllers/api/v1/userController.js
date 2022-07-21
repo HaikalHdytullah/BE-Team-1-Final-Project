@@ -55,7 +55,6 @@ module.exports = {
       let file;
 
       const user = await userService.findById(req.body.idUser);
-      const user_data = JSON.parse(JSON.stringify(user));
       if (user !== null) {
         if (req.file) {
           // Delete Image from Cloudinary
@@ -75,34 +74,36 @@ module.exports = {
             noHp: req.body.noHp,
             gambar: fotoProfile,
           });
-          let data = JSON.parse(JSON.stringify(user));
+          let user_data = await userService.findById(req.body.idUser);
+          let data = JSON.parse(JSON.stringify(user_data));
           delete data.password;
           return res.status(200).json({
             status: "OK",
             message: "Profile berhasil diperbarui",
             data,
           });
+        } else {
+          await userService.update(req.body.idUser, {
+            nama: req.body.nama,
+            kota: req.body.kota,
+            alamat: req.body.alamat,
+            noHp: req.body.noHp,
+          });
+          let user_data = await userService.findById(req.body.idUser);
+          let data = JSON.parse(JSON.stringify(user_data));
+          delete data.password;
+
+          res.status(200).json({
+            status: "OK",
+            message: "Profile berhasil diperbarui",
+            data,
+          });
         }
-
-        await userService.update(req.body.idUser, {
-          nama: req.body.nama,
-          kota: req.body.kota,
-          alamat: req.body.alamat,
-          noHp: req.body.noHp,
-        });
-
-        let data = JSON.parse(JSON.stringify(user));
-        delete data.password;
-
-        res.status(200).json({
-          status: "OK",
-          message: "Profile berhasil diperbarui",
-          data,
+      } else {
+        res.status(404).json({
+          message: "User Not Found",
         });
       }
-      res.status(404).json({
-        message: "User Not Found",
-      });
     } catch (error) {
       res.status(500).json({
         error: error.message,

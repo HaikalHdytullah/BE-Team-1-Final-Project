@@ -25,7 +25,6 @@ apiRouter.delete("/api/v1/auth/delete/:email", userController.deleteAccount);
 // API User
 apiRouter.put(
   "/api/v1/profile",
-  authController.authorize(1, 2),
   uploadOnMemory.single("gambar"),
   userController.updateProfile
 );
