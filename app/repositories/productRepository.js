@@ -81,7 +81,7 @@ module.exports = {
   },
 
   async deleteProduct(id) {
-    await transactions.destroy({ where: { idProduk: id } });
+    await transactions.destroy({ where: { idProduct: id } });
     return products.destroy({
       where: { id },
       include: [{ model: productpics }],
@@ -89,5 +89,8 @@ module.exports = {
   },
   deleteProductPic(id) {
     return productpics.destroy({ where: { idProduct: id } });
+  },
+  deleteProductPicWithId(id) {
+    return productpics.destroy({ where: { id } });
   },
 };
